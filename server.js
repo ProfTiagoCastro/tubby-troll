@@ -167,6 +167,15 @@ setInterval(() => {
   });
 }, 66);
 
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`A porta ${PORT} já está em uso (o jogo já está rodando em outro terminal ou no Docker?).`);
+    console.error('Feche o outro processo ou troque a porta no arquivo .env (ex.: PORT=3001).');
+    process.exit(1);
+  }
+  throw err;
+});
+
 initDb()
   .catch((err) => console.error('Falha ao iniciar banco:', err.message))
   .finally(() => server.listen(PORT, () => console.log(`Tubby Troll rodando em http://localhost:${PORT}`)));
