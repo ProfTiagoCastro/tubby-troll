@@ -1,0 +1,2 @@
+# Sempre LF, mesmo para quem clona no Windows: evita "\r" no .env, no Dockerfile e nos scripts dentro do container Linux
+* text=auto eol=lf
