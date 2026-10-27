@@ -1,0 +1,276 @@
+:root {
+  --noite: #15111f;
+  --noite-2: #1f1930;
+  --bloco: #2f2748;
+  --creme: #f2e6c9;
+  --creme-suave: #a79db8;
+  --espinho: #ff6b6b;
+  --sol: #ffd166;
+  --lilas: #b388ff;
+  --display: 'Rubik Mono One', system-ui, sans-serif;
+  --body: 'Nunito', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--body);
+  color: var(--creme);
+  background: radial-gradient(1200px 600px at 50% -200px, #2a2140, var(--noite));
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 24px 4px;
+}
+header h1 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  white-space: nowrap;
+}
+header h1 span { color: var(--espinho); }
+
+.mute {
+  margin-left: auto;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--noite-2);
+  color: var(--creme);
+  font-size: 0.8rem;
+  font-weight: 800;
+  box-shadow: none;
+  white-space: nowrap;
+}
+.mute[aria-pressed='true'] { color: var(--creme-suave); }
+.sair + .mute { margin-left: 0; }
+/* Sair em destaque: botão cheio na cor dos espinhos, com a mesma "sombra de botão" do Jogar */
+.sair {
+  padding: 7px 16px;
+  background: var(--espinho);
+  color: var(--noite);
+  font-size: 0.85rem;
+  font-weight: 900;
+  box-shadow: 0 3px 0 #c44848;
+}
+.sair:hover { background: #ff8585; }
+.sair:active { transform: translateY(2px); box-shadow: 0 1px 0 #c44848; }
+.status { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--creme-suave); }
+.status::before { content: '● '; }
+.status.online::before { color: #7ac943; }
+
+/* Trilha: as fases em ordem, com a cabeça de cada jogador onde ele está */
+#trail { display: flex; gap: 6px; list-style: none; margin: 0; padding: 0; flex: 1; }
+#trail li {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: 999px;
+  background: var(--noite-2);
+}
+#trail li.aqui { outline: 2px solid var(--sol); }
+#trail .num { font-family: var(--display); font-size: 0.7rem; color: var(--creme-suave); }
+#trail li.aqui .num { color: var(--sol); }
+#trail li.fim .num { color: var(--sol); }
+#trail .heads { display: flex; flex-wrap: wrap; gap: 2px; }
+#trail i, .dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--c);
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.25);
+}
+
+main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 20px;
+  padding: 12px 24px 24px;
+}
+@media (max-width: 960px) {
+  main { grid-template-columns: 1fr; padding: 12px 16px 16px; }
+  header { flex-wrap: wrap; padding: 14px 16px 4px; }
+  #trail { order: 3; flex-basis: 100%; }
+}
+
+#arena { position: relative; }
+#game {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 16px;
+  background: var(--noite);
+  box-shadow: 0 0 0 1px #ffffff10, 0 30px 60px -30px #000;
+}
+#game:focus { outline: none; }
+
+#hud {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 6px;
+}
+#hud div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 70px;
+  padding: 4px 10px;
+  border-radius: 10px;
+  background: #00000055;
+}
+#hud small { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--creme-suave); }
+#hud b { font-size: 1.05rem; font-weight: 900; font-variant-numeric: tabular-nums; }
+
+/* Tela inicial: monta o Tubby */
+#join, .overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 24px;
+  border-radius: 16px;
+  background: #15111fe8;
+}
+#preview {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: var(--noite-2);
+}
+.fields { display: flex; flex-direction: column; gap: 8px; width: min(340px, 100%); }
+.fields h2, .overlay h2 { margin: 0 0 4px; font-family: var(--display); font-weight: 400; font-size: 1.3rem; }
+.fields label, .label { font-size: 0.8rem; font-weight: 800; color: var(--creme-suave); margin-top: 4px; }
+@media (max-width: 640px) {
+  #join { flex-direction: column; gap: 10px; overflow-y: auto; justify-content: flex-start; }
+  #preview { width: 90px; height: 90px; flex-shrink: 0; }
+}
+
+input, button { font: inherit; }
+#name {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 2px solid var(--bloco);
+  background: var(--noite);
+  color: var(--creme);
+}
+button {
+  padding: 11px 14px;
+  border: none;
+  border-radius: 12px;
+  background: var(--sol);
+  color: var(--noite);
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #c99a2e;
+}
+button:active { transform: translateY(3px); box-shadow: 0 1px 0 #c99a2e; }
+.fields button[type='submit'] { margin-top: 8px; }
+:focus-visible { outline: 3px solid var(--lilas); outline-offset: 2px; }
+
+.swatches { display: flex; flex-wrap: wrap; gap: 8px; }
+.swatch {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--c);
+  box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+.swatch[aria-pressed='true'] { outline: 3px solid var(--creme); outline-offset: 2px; }
+.swatch.custom {
+  position: relative;
+  background: conic-gradient(#ff6b6b, #ffd166, #7ac943, #4ec3f7, #b388ff, #ff6b6b);
+}
+.swatch.custom input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--noite-2);
+  color: var(--creme);
+  font-weight: 700;
+  font-size: 0.85rem;
+  box-shadow: none;
+}
+.chip[aria-pressed='true'] { background: var(--creme); color: var(--noite); }
+
+.overlay { flex-direction: column; gap: 10px; text-align: center; }
+.overlay h2 { font-size: 2rem; color: var(--sol); }
+.overlay p { margin: 0 0 10px; font-size: 1.1rem; }
+
+#toast {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--creme);
+  color: var(--noite);
+  font-weight: 800;
+}
+
+.card {
+  background: var(--noite-2);
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
+.card h3 { margin: 0 0 10px; font-family: var(--display); font-weight: 400; font-size: 0.85rem; }
+.hint { color: var(--creme-suave); font-size: 0.82rem; margin: 6px 0; line-height: 1.4; }
+
+/* Lista compacta com rolagem própria: com a sala cheia o ranking continua visível */
+#players {
+  list-style: none;
+  margin: 0;
+  padding: 0 4px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: min(46vh, 420px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+#players li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 54px;
+  align-items: center;
+  gap: 4px 10px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  border-left: 4px solid var(--c);
+  background: var(--noite);
+}
+#players li.me { outline: 2px solid var(--sol); }
+#players li.vazio { display: block; border: none; color: var(--creme-suave); font-size: 0.85rem; }
+#players .progresso { height: 6px; border-radius: 999px; background: var(--noite-2); overflow: hidden; }
+#players .progresso i { display: block; height: 100%; width: 0; border-radius: 999px; background: var(--c); transition: width 0.2s linear; }
+#players b { display: block; font-weight: 800; font-size: 0.9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#players span { display: block; font-size: 0.72rem; color: var(--creme-suave); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+th, td { text-align: left; padding: 6px 4px; }
+th { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--creme-suave); }
+td:nth-child(n + 2) { font-variant-numeric: tabular-nums; }
+td .dot { margin-right: 6px; vertical-align: -1px; }
+tbody tr + tr td { border-top: 1px solid #ffffff10; }
+
+@media (prefers-reduced-motion: reduce) {
+  button:active { transform: none; }
+}

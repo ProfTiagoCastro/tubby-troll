@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tubby Troll</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Ccircle cx=%2216%22 cy=%2219%22 r=%2211%22 fill=%22%239b59d0%22/%3E%3Cpath d=%22M16 8V2%22 stroke=%22%239b59d0%22 stroke-width=%223%22/%3E%3Ccircle cx=%2216%22 cy=%2217%22 r=%225%22 fill=%22%23f6dcc4%22/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Tubby <span>Troll</span></h1>
+    <ol id="trail" aria-label="Em que fase cada jogador está"></ol>
+    <button id="leave" class="mute sair" type="button" hidden>← Sair</button>
+    <button id="mute" class="mute" type="button" aria-pressed="false">🔊 Som ligado</button>
+    <span id="status" class="status">conectando…</span>
+  </header>
+
+  <main>
+    <section id="arena">
+      <canvas id="game" width="1200" height="640" tabindex="0" aria-label="Tela do jogo"></canvas>
+
+      <div id="hud" hidden>
+        <div><small>Fase</small><b id="hud-lvl">1/5</b></div>
+        <div><small>Mortes</small><b id="hud-deaths">0</b></div>
+        <div><small>Tempo</small><b id="hud-time">0:00.0</b></div>
+      </div>
+
+      <form id="join">
+        <canvas id="preview" width="120" height="120" aria-hidden="true"></canvas>
+        <div class="fields">
+          <h2>Monte seu Tubby</h2>
+          <label for="name">Seu nome</label>
+          <input id="name" maxlength="16" placeholder="Ex.: Ana" autocomplete="off" required>
+          <span class="label">Cor</span>
+          <div id="swatches" class="swatches"></div>
+          <span class="label">Antena</span>
+          <div id="antennas" class="chips"></div>
+          <button type="submit">Jogar</button>
+          <p class="hint">Setas ou WASD para andar, ↑/W/espaço para pular, R para recomeçar a fase, M para tirar o som. Nada é o que parece.</p>
+        </div>
+      </form>
+
+      <div id="win" class="overlay" hidden>
+        <h2>Você zerou!</h2>
+        <p id="win-stats"></p>
+        <button id="again">Jogar de novo</button>
+      </div>
+
+      <div id="toast" hidden></div>
+    </section>
+
+    <aside>
+      <div class="card">
+        <h3>Jogando agora</h3>
+        <ul id="players"><li class="vazio">Ninguém jogando ainda.</li></ul>
+      </div>
+      <div class="card">
+        <h3>Ranking</h3>
+        <table>
+          <thead><tr><th>Nome</th><th>Mortes</th><th>Tempo</th></tr></thead>
+          <tbody id="ranking"><tr><td colspan="3" class="hint">carregando…</td></tr></tbody>
+        </table>
+      </div>
+    </aside>
+  </main>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="levels.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

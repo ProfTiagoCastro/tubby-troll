@@ -1,0 +1,8 @@
+services:
+  tubby:
+    build: .
+    image: tubby-troll
+    ports:
+      - "3000:3000"
+    env_file: .env   # DATABASE_URL do Neon fica fora da imagem
+    restart: unless-stopped
