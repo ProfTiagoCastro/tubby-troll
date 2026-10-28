@@ -1,7 +1,7 @@
 # Tubby Troll
 
 Jogo de plataforma multiplayer "troll" para a aula de Computação em Nuvem.
-São 5 fases cheias de pegadinhas. Cada jogador entra só com o nome, escolhe a cor e a antena do seu Tubby
+São 10 fases cheias de pegadinhas, cada uma mais difícil que a anterior. Cada jogador entra só com o nome, escolhe a cor e a antena do seu Tubby
 e vê os colegas que estão na mesma fase como fantasminhas. Quem zera entra no ranking (menos mortes vence; empate, o mais rápido).
 
 ## Arquitetura
@@ -12,7 +12,7 @@ navegador (canvas)  ──WebSocket (Socket.IO)──►  container Node.js  ─
 ```
 
 - `server.js`: Express (arquivos estáticos + `/api/ranking` + `/health`) e Socket.IO (posições, mortes, fases)
-- `public/levels.js`: as 5 fases (dá pra editar e criar novas!)
+- `public/levels.js`: as 10 fases (dá pra editar e criar novas!)
 - `public/game.js`: motor do jogo, desenho dos Tubbies e multiplayer
 - `Dockerfile` / `docker-compose.yml`: empacotamento e execução
 

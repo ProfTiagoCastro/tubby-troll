@@ -363,7 +363,7 @@ function updatePlayer(dt) {
     const deadly = e.k === 'spike' || e.k === 'saw' || e.k === 'ball' || (e.k === 'crusher' && e.state === 'falling');
     if (deadly && overlap(box, hitbox(e))) return die();
     if (!overlap(box, e)) continue;
-    if (e.k === 'key') { e.hidden = true; world.gotKey = true; }
+    if (e.k === 'key' && e.state !== 'moving') { e.hidden = true; world.gotKey = true; } // fugindo não dá pra pegar
     if (e.k === 'spring' && p.vy * p.g >= 0) { p.vy = -SPRING * p.g; p.ground = false; p.jumping = false; e.boing = 0.25; sfx('mola'); }
     if (e.k === 'flip') inFlip = true;
     if (e.k === 'door' && !e.fake && (!world.hasKey || world.gotKey)) return nextLevel();
@@ -886,7 +886,7 @@ async function loadRanking() {
     const rows = await (await fetch('/api/ranking')).json();
     $('ranking').innerHTML = rows.length
       ? rows.map((r) => `<tr><td><i class="dot" style="--c:${esc(r.cor)}"></i>${esc(r.nome)}</td><td>${r.mortes}</td><td>${fmt(r.tempo_ms)}</td></tr>`).join('')
-      : '<tr><td colspan="3" class="hint">Ninguém zerou ainda. As 5 fases esperam por você.</td></tr>';
+      : `<tr><td colspan="3" class="hint">Ninguém zerou ainda. As ${LEVELS.length} fases esperam por você.</td></tr>`;
   } catch {
     $('ranking').innerHTML = '<tr><td colspan="3" class="hint">Ranking fora do ar: confira a DATABASE_URL do servidor.</td></tr>';
   }
